@@ -1,12 +1,12 @@
 package com.aritra.goldmannasa.domain.repository
 
-import android.util.Log
 import com.aritra.goldmannasa.data.local.db.ApodDao
 import com.aritra.goldmannasa.data.local.entities.APODEntity
 import com.aritra.goldmannasa.data.remote.NetworkUtils
-import com.aritra.goldmannasa.data.remote.dtos.APODDto
 import com.aritra.goldmannasa.data.remote.network.NasaApi
 import com.aritra.goldmannasa.data.remote.network.utils.Resource
+import com.aritra.goldmannasa.utils.FAILED_TO_MARK_AS_FAV
+import com.aritra.goldmannasa.utils.NO_NETWORK_MESSAGE
 import com.aritra.goldmannasa.utils.getTodaysDate
 import com.aritra.goldmannasa.utils.toEntity
 import javax.inject.Inject
@@ -22,61 +22,58 @@ class ApodRepositoryImpl @Inject constructor(
         return try {
             /*check if data is available in local db
             * if yes --> return the same as entity format
+            * else check if network is available --> if not then send error with no network message
             * else make the network call
             * if network call is successful --> save data in DB --> return the same
             * is network call fails return error*/
 
-            //Log.i(TAG,"is network working ${networkUtils.getConnectivityStatus()}")
             val today = getTodaysDate()
-            //Log.i(TAG, "getLatestAPOD for date: $today")
-            val dbResponse = apodDao.getLocalAPODForDate(today)
-            if (dbResponse.isNullOrEmpty()) {
-                //Log.i(TAG, "getLatestAPOD db response if empty: making network call")
-                val apiResponse = nasaApi.getLatestAPOD()
-                if (apiResponse.isSuccessful) {
-                    //Log.i(TAG, "getLatestAPOD network call is successful")
-                    val apodDto = apiResponse.body()
-                    val equivalentEntity = apodDto?.toEntity()
-                    equivalentEntity?.let {
-                        //Log.i(TAG, "getLatestAPOD saving network result to local DB")
-                        apodDao.insertAPOD(it)
-                        Resource.success(it)
-                    } ?: Resource.error(apiResponse.code().toString(), null)
-                } else {
-                    //Log.i(TAG, "getLatestAPOD network call failed")
-                    Resource.error(apiResponse.code().toString(), null)
-                }
-            } else {
-                //Log.i(TAG, "getLatestAPOD returning data from db")
-                return Resource.success(dbResponse[0])
-            }
+            getDatedAPOD(today)
+//            val dbResponse = apodDao.getLocalAPODForDate(today)
+//            if (dbResponse.isNullOrEmpty()) {
+//                if (networkUtils.getConnectivityStatus()) {
+//                    val apiResponse = nasaApi.getLatestAPOD()
+//                    if (apiResponse.isSuccessful) {
+//                        val apodDto = apiResponse.body()
+//                        val equivalentEntity = apodDto?.toEntity()
+//                        equivalentEntity?.let {
+//                            apodDao.insertAPOD(it)
+//                            Resource.success(it)
+//                        } ?: Resource.error(apiResponse.code().toString(), null)
+//                    } else {
+//                        Resource.error(apiResponse.code().toString(), null)
+//                    }
+//                } else {
+//                    Resource.error(msg = NO_NETWORK_MESSAGE, null)
+//                }
+//            } else {
+//                return Resource.success(dbResponse[0])
+//            }
         } catch (e: Exception) {
-            Resource.error("" + e.message, null)
+            Resource.error(e.message.toString(), null)
         }
     }
 
     override suspend fun getDatedAPOD(date: String): Resource<APODEntity> {
         return try {
-            //Log.i(TAG, "getDatedAPOD for date: $date")
             val dbResponse = apodDao.getLocalAPODForDate(date)
             if (dbResponse.isNullOrEmpty()) {
-                //Log.i(TAG, "getDatedAPOD db response if empty: making network call")
-                val apiResponse = nasaApi.getDatedAPOD(date = date)
-                if (apiResponse.isSuccessful) {
-                    //Log.i(TAG, "getDatedAPOD network call is successful")
-                    val apodDto = apiResponse.body()
-                    val equivalentEntity = apodDto?.toEntity()
-                    equivalentEntity?.let {
-                        //Log.i(TAG, "getDatedAPOD saving network result to local DB")
-                        apodDao.insertAPOD(it)
-                        Resource.success(it)
-                    } ?: Resource.error(apiResponse.code().toString(), null)
+                if (networkUtils.getConnectivityStatus()) {
+                    val apiResponse = nasaApi.getDatedAPOD(date = date)
+                    if (apiResponse.isSuccessful) {
+                        val apodDto = apiResponse.body()
+                        val equivalentEntity = apodDto?.toEntity()
+                        equivalentEntity?.let {
+                            apodDao.insertAPOD(it)
+                            Resource.success(it)
+                        } ?: Resource.error(apiResponse.code().toString(), null)
+                    } else {
+                        Resource.error(apiResponse.code().toString(), null)
+                    }
                 } else {
-                    //Log.i(TAG, "getDatedAPOD network call failed")
-                    Resource.error(apiResponse.code().toString(), null)
+                    Resource.error(NO_NETWORK_MESSAGE, null)
                 }
             } else {
-                //Log.i(TAG, "getDatedAPOD returning data from db")
                 return Resource.success(dbResponse[0])
             }
         } catch (e: Exception) {
@@ -89,7 +86,7 @@ class ApodRepositoryImpl @Inject constructor(
             apodDao.makeAPODFavourite(apod.date, !apod.isFavourite)
             Resource.success(true)
         } catch (e: Exception) {
-            Resource.error(msg = "Failed to mark as favourite", data = false)
+            Resource.error(msg = FAILED_TO_MARK_AS_FAV, data = false)
         }
     }
 }

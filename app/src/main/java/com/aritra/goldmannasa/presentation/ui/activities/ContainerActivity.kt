@@ -42,8 +42,7 @@ class ContainerActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_container)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -59,7 +58,6 @@ class ContainerActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.container, menu)
         return true
     }
@@ -88,8 +86,6 @@ class ContainerActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
     private fun saveThemePreference(mode:Int){
-        //val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
         val prefs = this.getPreferences(Context.MODE_PRIVATE)
         prefs.edit().putInt(THEME_TYPE, mode).apply()
         AppCompatDelegate.setDefaultNightMode(mode)

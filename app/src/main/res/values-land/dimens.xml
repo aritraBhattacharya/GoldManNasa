@@ -1,3 +1,8 @@
 <resources>
     <dimen name="fab_margin">48dp</dimen>
+    <dimen name="date_text_margin">10dp</dimen>
+    <dimen name="apod_title_margin">10dp</dimen>
+    <dimen name="fav_btn_margin">10dp</dimen>
+    <dimen name="apod_date_margin">10dp</dimen>
+    <dimen name="apod_explanation_margin">10dp</dimen>
 </resources>
