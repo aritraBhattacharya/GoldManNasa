@@ -13,6 +13,7 @@ import com.aritra.goldmannasa.data.local.entities.APODEntity
 )
 abstract class ApodDB : RoomDatabase() {
     abstract fun getApodDao(): ApodDao
+
     companion object {
         @Volatile
         private var INSTANCE: ApodDB? = null

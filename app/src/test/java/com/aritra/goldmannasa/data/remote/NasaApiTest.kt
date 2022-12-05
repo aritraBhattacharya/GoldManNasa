@@ -31,6 +31,7 @@ class NasaApiTest {
             .addConverterFactory(GsonConverterFactory.create()).build().create(NasaApi::class.java)
 
     }
+
     @After
     fun tearDown() {
         mockWebServer.shutdown()
@@ -65,7 +66,6 @@ class NasaApiTest {
             assertThat(response.code()).isEqualTo(CODE_BAD_REQUEST)
         }
     }
-
 
 
 }

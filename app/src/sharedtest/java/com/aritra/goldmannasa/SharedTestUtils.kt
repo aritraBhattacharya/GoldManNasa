@@ -1,7 +1,6 @@
 import com.aritra.goldmannasa.data.local.db.ApodDao
 import com.aritra.goldmannasa.data.local.entities.APODEntity
 import com.aritra.goldmannasa.data.remote.dtos.APODDto
-import org.mockito.Mockito
 
 class SharedTestUtils {
 

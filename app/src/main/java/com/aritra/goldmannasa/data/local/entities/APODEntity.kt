@@ -14,5 +14,5 @@ data class APODEntity(
     val service_version: String,
     val title: String,
     val url: String,
-    val isFavourite:Boolean =false
+    val isFavourite: Boolean = false,
 )

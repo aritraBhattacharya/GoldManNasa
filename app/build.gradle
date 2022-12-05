@@ -31,12 +31,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    sourceSets{
-        androidTest{
-            java.srcDirs+="src/sharedtest/java"
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/sharedtest/java"
         }
-        test{
-            java.srcDirs+="src/sharedtest/java"
+        test {
+            java.srcDirs += "src/sharedtest/java"
         }
     }
     buildFeatures {

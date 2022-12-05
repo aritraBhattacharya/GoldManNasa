@@ -21,7 +21,7 @@ class NasaApp : Application() {
         )
     }
 
-    companion object{
+    companion object {
         lateinit var appInstance: NasaApp
     }
 }

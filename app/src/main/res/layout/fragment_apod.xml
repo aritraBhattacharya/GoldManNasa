@@ -61,17 +61,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="apod_img,playerView"/>
+            app:constraint_referenced_ids="apod_img,playerView" />
 
         <TextView
             android:id="@+id/apod_title"
+            style="@style/Theme.GoldManNasa.TitleStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/apod_title_margin"
+            android:hint="@string/title_loading"
             android:textSize="16sp"
             android:textStyle="bold"
-            style="@style/Theme.GoldManNasa.TitleStyle"
-            android:hint="@string/title_loading"
             app:layout_constraintEnd_toStartOf="@+id/fav_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/media_barrier" />
@@ -80,13 +80,13 @@
             android:id="@+id/fav_btn"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scaleType="centerInside"
             android:layout_marginEnd="@dimen/fav_btn_margin"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_not_fav"
+            app:layout_constraintBottom_toBottomOf="@id/apod_title"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/apod_title"
-            app:layout_constraintBottom_toBottomOf="@id/apod_title"
-            android:src="@drawable/ic_not_fav"/>
+            app:layout_constraintTop_toTopOf="@+id/apod_title" />
 
         <TextView
             android:id="@+id/apod_date"
@@ -100,14 +100,14 @@
 
         <TextView
             android:id="@+id/apod_explanation"
+            style="@style/Theme.GoldManNasa.Explanation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/apod_explanation_margin"
-            android:scrollbars="vertical"
             android:hint="@string/dummy_desc"
+            android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            style="@style/Theme.GoldManNasa.Explanation"
             app:layout_constraintTop_toBottomOf="@+id/apod_date" />
 
         <ProgressBar

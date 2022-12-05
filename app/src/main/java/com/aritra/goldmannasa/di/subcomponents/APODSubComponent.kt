@@ -13,7 +13,7 @@ interface APODSubComponent {
 
 
     @Subcomponent.Factory
-    interface Factory{
-        fun create():APODSubComponent
+    interface Factory {
+        fun create(): APODSubComponent
     }
 }

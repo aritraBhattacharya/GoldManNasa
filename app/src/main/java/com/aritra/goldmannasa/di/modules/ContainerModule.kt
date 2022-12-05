@@ -11,7 +11,8 @@ import dagger.Module
 abstract class ContainerModule {
 
     @Binds
-    abstract fun getSearchRepository(repoImpl: ApodRepositoryImpl):ApodRepository
+    abstract fun getSearchRepository(repoImpl: ApodRepositoryImpl): ApodRepository
+
     @Binds
-    abstract fun getSearchUseCase(usecaseImpl: ApodUsecaseImpl):ApodUsecase
+    abstract fun getSearchUseCase(usecaseImpl: ApodUsecaseImpl): ApodUsecase
 }

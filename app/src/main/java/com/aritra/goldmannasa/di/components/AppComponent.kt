@@ -2,11 +2,9 @@ package com.aritra.goldmannasa.di.components
 
 import android.content.Context
 import com.aritra.goldmannasa.NasaApp
-import com.aritra.goldmannasa.di.modules.ContainerModule
 import com.aritra.goldmannasa.di.modules.DBModule
 import com.aritra.goldmannasa.di.modules.NetworkModule
 import com.aritra.goldmannasa.di.subcomponents.APODSubComponent
-import com.aritra.goldmannasa.presentation.ui.activities.ContainerActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -17,7 +15,7 @@ import javax.inject.Singleton
     DBModule::class])
 interface AppComponent {
 
-    fun getAPODSubComponentFactory() : APODSubComponent.Factory
+    fun getAPODSubComponentFactory(): APODSubComponent.Factory
 
     @Component.Factory
     interface Factory {
@@ -25,7 +23,7 @@ interface AppComponent {
             @BindsInstance nasaApp: NasaApp,
             @BindsInstance appContext: Context,
             networkModule: NetworkModule,
-            dbModule: DBModule
+            dbModule: DBModule,
         ): AppComponent
     }
 

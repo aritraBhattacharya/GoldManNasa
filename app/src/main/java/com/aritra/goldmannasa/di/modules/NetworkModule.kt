@@ -1,6 +1,5 @@
 package com.aritra.goldmannasa.di.modules
 
-import android.app.Application
 import com.aritra.goldmannasa.NasaApp
 import com.aritra.goldmannasa.data.remote.NetworkUtils
 import com.aritra.goldmannasa.data.remote.network.BASE_URL
@@ -32,14 +31,14 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(cache:Cache,networkUtils: NetworkUtils): OkHttpClient {
+    fun provideOkHttpClient(cache: Cache, networkUtils: NetworkUtils): OkHttpClient {
         val clientBuilder = OkHttpClient.Builder()
 
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-         clientBuilder.cache(cache)
+        clientBuilder.cache(cache)
         clientBuilder.addInterceptor(httpLoggingInterceptor)
         clientBuilder.addNetworkInterceptor(networkUtils.onlineInterceptor)
         clientBuilder.addInterceptor(networkUtils.offlineInterceptor)

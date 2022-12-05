@@ -29,8 +29,15 @@ class ApodDaoTest {
     }
 
     @Test
-    public fun insertAPOD_test()  = runTest{
-        val apodEntity = APODEntity(date = "20-12-2021", explanation = "explanation", title = "title", url = "url", hdurl = "hdUrl", media_type = "image", service_version = "v1", isFavourite = false)
+    public fun insertAPOD_test() = runTest {
+        val apodEntity = APODEntity(date = "20-12-2021",
+            explanation = "explanation",
+            title = "title",
+            url = "url",
+            hdurl = "hdUrl",
+            media_type = "image",
+            service_version = "v1",
+            isFavourite = false)
         dao.insertAPOD(apodEntity)
         val localList = dao.getAllLocalAPOD()
         assertThat(localList).isNotEmpty()
@@ -38,8 +45,15 @@ class ApodDaoTest {
     }
 
     @Test
-    public fun getLocalAPODForDate_test()  = runTest{
-        val apodEntity = APODEntity(date = "20-12-2021", explanation = "explanation", title = "title", url = "url", hdurl = "hdUrl", media_type = "image", service_version = "v1", isFavourite = false)
+    public fun getLocalAPODForDate_test() = runTest {
+        val apodEntity = APODEntity(date = "20-12-2021",
+            explanation = "explanation",
+            title = "title",
+            url = "url",
+            hdurl = "hdUrl",
+            media_type = "image",
+            service_version = "v1",
+            isFavourite = false)
         dao.insertAPOD(apodEntity)
         val localList = dao.getLocalAPODForDate("20-12-2021")
         assertThat(localList).isNotEmpty()
@@ -47,10 +61,17 @@ class ApodDaoTest {
     }
 
     @Test
-    public fun makeAPODFavourite_test()  = runTest{
-        val apodEntity = APODEntity(date = "20-12-2021", explanation = "explanation", title = "title", url = "url", hdurl = "hdUrl", media_type = "image", service_version = "v1", isFavourite = false)
+    public fun makeAPODFavourite_test() = runTest {
+        val apodEntity = APODEntity(date = "20-12-2021",
+            explanation = "explanation",
+            title = "title",
+            url = "url",
+            hdurl = "hdUrl",
+            media_type = "image",
+            service_version = "v1",
+            isFavourite = false)
         dao.insertAPOD(apodEntity)
-        dao.makeAPODFavourite("20-12-2021",true)
+        dao.makeAPODFavourite("20-12-2021", true)
         val localList = dao.getLocalAPODForDate("20-12-2021")
         assertThat(localList).isNotEmpty()
         assertThat(localList[0].isFavourite).isTrue()

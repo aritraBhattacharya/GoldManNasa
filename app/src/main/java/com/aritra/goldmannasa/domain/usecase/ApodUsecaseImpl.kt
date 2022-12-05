@@ -14,7 +14,7 @@ class ApodUsecaseImpl @Inject constructor(private val repository: ApodRepository
         return repository.getDatedAPOD(date)
     }
 
-    override suspend fun saveAPODToFavorites(apod: APODEntity):Resource<Boolean> {
+    override suspend fun saveAPODToFavorites(apod: APODEntity): Resource<Boolean> {
         return repository.saveAPODToFavorites(apod)
     }
 }

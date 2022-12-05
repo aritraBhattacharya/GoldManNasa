@@ -16,8 +16,8 @@ interface ApodDao {
     suspend fun getAllLocalAPOD(): List<APODEntity>
 
     @Query("SELECT * FROM apod_table where date= :date")
-    suspend fun getLocalAPODForDate(date:String): List<APODEntity>
+    suspend fun getLocalAPODForDate(date: String): List<APODEntity>
 
     @Query("UPDATE apod_table SET isFavourite=:isFavourite where date= :date")
-    suspend fun makeAPODFavourite(date:String,isFavourite:Boolean)
+    suspend fun makeAPODFavourite(date: String, isFavourite: Boolean)
 }
