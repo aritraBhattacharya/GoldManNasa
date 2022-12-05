@@ -1,10 +1,15 @@
 package com.aritra.goldmannasa.di.modules
 
+import android.app.Application
+import com.aritra.goldmannasa.NasaApp
+import com.aritra.goldmannasa.data.remote.NetworkUtils
 import com.aritra.goldmannasa.data.remote.network.BASE_URL
 import com.aritra.goldmannasa.data.remote.network.NasaApi
 import dagger.Module
 import dagger.Provides
+import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -15,7 +20,7 @@ class NetworkModule {
     @Singleton
     fun provideRetorfitAPI(
         okHttpClient: OkHttpClient,
-        converterFactory: GsonConverterFactory
+        converterFactory: GsonConverterFactory,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -27,27 +32,17 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(cache:Cache,networkUtils: NetworkUtils): OkHttpClient {
         val clientBuilder = OkHttpClient.Builder()
 
-//        val httpLoggingInterceptor = HttpLoggingInterceptor()
-//        if (BuildConfig.DEBUG) {
-//            logging.level = HttpLoggingInterceptor.Level.HEADERS
-//            logging.level = HttpLoggingInterceptor.Level.BODY
-//        }
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-//        clientBuilder.cache() --> cache file
-//        client.addInterceptor(HeaderInterceptor()) --> for adding header values
-//        clientBuilder.addInterceptor(httpLoggingInterceptor)  --> add something like logging interceptor : HttpLoggingInterceptor
-//        clientBuilder.addNetworkInterceptor() --> add the online interceptor for cache here
-//        clientBuilder.addInterceptor() --> add offline interceptor for cache here
-//        clientBuilder.authenticator() --> for access and refresh token
-//        clientBuilder.certificatePinner() --> for ssl certificate pinning
-//        clientBuilder.addInterceptor(GzipRequestInterceptor()) --> for data compression over internet
-//        clientBuilder.connectTimeout()
-//        clientBuilder.readTimeout(60, TimeUnit.SECOND)
-//        clientBuilder.writeTimeout(60, TimeUnit.SECOND)
-//        clientBuilder.connectionPool(60, TimeUnit.SECOND)
+         clientBuilder.cache(cache)
+        clientBuilder.addInterceptor(httpLoggingInterceptor)
+        clientBuilder.addNetworkInterceptor(networkUtils.onlineInterceptor)
+        clientBuilder.addInterceptor(networkUtils.offlineInterceptor)
         return clientBuilder.build()
 
     }
@@ -63,4 +58,12 @@ class NetworkModule {
     fun provideGifApi(retrofit: Retrofit): NasaApi {
         return retrofit.create(NasaApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpCache(application: NasaApp): Cache {
+        val cacheSize: Long = 1024 * 1024 * 100
+        return Cache(application.cacheDir, cacheSize)
+    }
+
 }

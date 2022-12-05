@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-fun getTodaysDate():String{
+fun getTodaysDate(): String {
     val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     val date = Date(System.currentTimeMillis())
     return dateFormat.format(date)

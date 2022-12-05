@@ -9,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.aritra.goldmannasa.R
 import com.aritra.goldmannasa.data.local.entities.APODEntity
 import com.aritra.goldmannasa.data.remote.network.utils.Status
@@ -38,7 +37,7 @@ class ApodFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var searchEditText: TextView
     private val viewModel: ApodViewModel by activityViewModels()
-    private var currentAPOD: APODEntity?=null
+    private var currentAPOD: APODEntity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,10 +102,9 @@ class ApodFragment : Fragment() {
                                 apodTitle.text = aopdEntity.title
                                 showMedia(aopdEntity.media_type, aopdEntity.url)
 
-                                if(aopdEntity.isFavourite){
+                                if (aopdEntity.isFavourite) {
                                     favBtn.setImageResource(R.drawable.ic_fav)
-                                }
-                                else{
+                                } else {
                                     favBtn.setImageResource(R.drawable.ic_not_fav)
                                 }
 
@@ -116,7 +114,7 @@ class ApodFragment : Fragment() {
 
                     }
                     Status.ERROR -> {
-                        it.message?.let {msg-> showSnackBarWithRetryOption(msg)}
+                        it.message?.let { msg -> showSnackBarWithRetryOption(msg) }
                         showErrorView()
                         binding.gifSearchProgress.visibility = View.GONE
 
@@ -134,7 +132,7 @@ class ApodFragment : Fragment() {
             playerView.visibility = View.GONE
             apodImg.visibility = View.VISIBLE
             apodImg.setImageResource(R.drawable.ic_image_place_holder)
-            apodImg.scaleType= ImageView.ScaleType.CENTER_INSIDE
+            apodImg.scaleType = ImageView.ScaleType.CENTER_INSIDE
             apodDate.text = DUMMY_TEXT_FOR_ERROR
             apodTitle.text = DUMMY_TEXT_FOR_ERROR
             apodExplanation.text = DUMMY_TEXT_FOR_ERROR
@@ -145,8 +143,8 @@ class ApodFragment : Fragment() {
         val snackBar =
             Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).apply {
                 setAction(RETRY_TEXT) {
-                    binding.apodEt.text.toString().let { etText->
-                        if(etText.isNullOrEmpty()) viewModel.getLatestAPOD()
+                    binding.apodEt.text.toString().let { etText ->
+                        if (etText.isNullOrEmpty()) viewModel.getLatestAPOD()
                         else viewModel.getDatedAPOD(etText)
                     }
                 }
@@ -179,6 +177,13 @@ class ApodFragment : Fragment() {
                 }
             }
             else -> {// set error view
+                binding.apply {
+                    playerView.visibility = View.GONE
+                    apodImg.visibility = View.VISIBLE
+                    apodImg.scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    apodImg.setImageResource(R.drawable.ic_image_place_holder)
+                }
+
             }
         }
 

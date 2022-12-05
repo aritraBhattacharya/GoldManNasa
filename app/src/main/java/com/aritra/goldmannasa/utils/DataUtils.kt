@@ -5,7 +5,7 @@ import com.aritra.goldmannasa.data.remote.dtos.APODDto
 
 
 fun APODDto.toEntity() = APODEntity(
-    copyright  = copyright?:"",
+    copyright = copyright ?: "",
     date = date,
     explanation = explanation,
     hdurl = hdurl,
@@ -13,5 +13,5 @@ fun APODDto.toEntity() = APODEntity(
     service_version = service_version,
     title = title,
     url = url,
-    isFavourite =false
+    isFavourite = false
 )

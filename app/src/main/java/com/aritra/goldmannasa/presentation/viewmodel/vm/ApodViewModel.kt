@@ -11,10 +11,8 @@ import kotlinx.coroutines.launch
 
 class ApodViewModel(private val apodUsecase: ApodUsecase) : ViewModel() {
 
-    private var _apod:MutableLiveData<Resource<APODEntity>> = MutableLiveData()
+    private var _apod: MutableLiveData<Resource<APODEntity>> = MutableLiveData()
     val apod = _apod
-
-
 
 
     fun getLatestAPOD() {
@@ -25,7 +23,7 @@ class ApodViewModel(private val apodUsecase: ApodUsecase) : ViewModel() {
         }
     }
 
-    fun getDatedAPOD(date:String){
+    fun getDatedAPOD(date: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _apod.postValue(Resource.loading(null))
             val response = apodUsecase.getDatedAPOD(date = date)
@@ -33,7 +31,7 @@ class ApodViewModel(private val apodUsecase: ApodUsecase) : ViewModel() {
         }
     }
 
-    fun saveAPODToFavorites(apodEntity: APODEntity){
+    fun saveAPODToFavorites(apodEntity: APODEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             _apod.postValue(Resource.loading(null))
             val updateResponse = apodUsecase.saveAPODToFavorites(apodEntity)

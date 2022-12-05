@@ -16,12 +16,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.aritra.goldmannasa.NasaApp
 import com.aritra.goldmannasa.R
 import com.aritra.goldmannasa.databinding.ActivityContainerBinding
+import com.aritra.goldmannasa.di.scopes.APODScope
 import com.aritra.goldmannasa.presentation.utils.THEME_TYPE
 import com.aritra.goldmannasa.presentation.viewmodel.factories.ApodViewModelFactory
 import com.aritra.goldmannasa.presentation.viewmodel.vm.ApodViewModel
 import com.google.android.material.navigation.NavigationView
 import javax.inject.Inject
 
+@APODScope
 class ContainerActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -47,14 +49,21 @@ class ContainerActivity : AppCompatActivity() {
             R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
         // update theme according to saved preference
         val pref = this.getPreferences(Context.MODE_PRIVATE)
-        AppCompatDelegate.setDefaultNightMode(pref.getInt(THEME_TYPE,AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM))
+        AppCompatDelegate.setDefaultNightMode(pref.getInt(THEME_TYPE,
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM))
 
-        NasaApp.appInstance.appComponent.inject(this)
-        viewModel = ViewModelProvider(this,factory)[ApodViewModel::class.java]
+        // access the sub component
+        NasaApp.appInstance.appComponent.getAPODSubComponentFactory().create().inject(this)
 
-        if(savedInstanceState==null) viewModel.getLatestAPOD()
+        // initiate viewmodel
+        viewModel = ViewModelProvider(this, factory)[ApodViewModel::class.java]
+
+        // If activity is getting created for the 1st time, fetch the latest APOD and display on the screen
+        if (savedInstanceState == null) viewModel.getLatestAPOD()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -63,16 +72,17 @@ class ContainerActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.select_theme_default ->{
+        return when (item.itemId) {
+            // update theme according to user preference
+            R.id.select_theme_default -> {
                 saveThemePreference(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 true
             }
-            R.id.select_theme_day->{
+            R.id.select_theme_day -> {
                 saveThemePreference(AppCompatDelegate.MODE_NIGHT_NO)
                 true
             }
-            R.id.select_theme_dark->{
+            R.id.select_theme_dark -> {
                 saveThemePreference(AppCompatDelegate.MODE_NIGHT_YES)
                 true
             }
@@ -85,7 +95,8 @@ class ContainerActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_container)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-    private fun saveThemePreference(mode:Int){
+
+    private fun saveThemePreference(mode: Int) {
         val prefs = this.getPreferences(Context.MODE_PRIVATE)
         prefs.edit().putInt(THEME_TYPE, mode).apply()
         AppCompatDelegate.setDefaultNightMode(mode)

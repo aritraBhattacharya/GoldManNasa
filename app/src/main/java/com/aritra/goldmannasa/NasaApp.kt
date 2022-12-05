@@ -12,8 +12,6 @@ class NasaApp : Application() {
     override fun onCreate() {
 
         super.onCreate()
-        // initiate logging here according to build type
-        // initiate app component
         appInstance = this
         appComponent = DaggerAppComponent.factory().create(
             this,

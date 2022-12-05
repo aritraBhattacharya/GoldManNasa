@@ -20,41 +20,21 @@ class ApodRepositoryImpl @Inject constructor(
 ) : ApodRepository {
     override suspend fun getLatestAPOD(): Resource<APODEntity> {
         return try {
-            /*check if data is available in local db
-            * if yes --> return the same as entity format
-            * else check if network is available --> if not then send error with no network message
-            * else make the network call
-            * if network call is successful --> save data in DB --> return the same
-            * is network call fails return error*/
-
             val today = getTodaysDate()
+            // call getDatedAPOD for today's date
             getDatedAPOD(today)
-//            val dbResponse = apodDao.getLocalAPODForDate(today)
-//            if (dbResponse.isNullOrEmpty()) {
-//                if (networkUtils.getConnectivityStatus()) {
-//                    val apiResponse = nasaApi.getLatestAPOD()
-//                    if (apiResponse.isSuccessful) {
-//                        val apodDto = apiResponse.body()
-//                        val equivalentEntity = apodDto?.toEntity()
-//                        equivalentEntity?.let {
-//                            apodDao.insertAPOD(it)
-//                            Resource.success(it)
-//                        } ?: Resource.error(apiResponse.code().toString(), null)
-//                    } else {
-//                        Resource.error(apiResponse.code().toString(), null)
-//                    }
-//                } else {
-//                    Resource.error(msg = NO_NETWORK_MESSAGE, null)
-//                }
-//            } else {
-//                return Resource.success(dbResponse[0])
-//            }
         } catch (e: Exception) {
             Resource.error(e.message.toString(), null)
         }
     }
 
     override suspend fun getDatedAPOD(date: String): Resource<APODEntity> {
+        /*check if data is available in local db
+           * if yes --> return the same as entity format
+           * else check if network is available --> if not then send error with no network message
+           * else make the network call
+           * if network call is successful --> save data in DB --> return the same
+           * is network call fails return error*/
         return try {
             val dbResponse = apodDao.getLocalAPODForDate(date)
             if (dbResponse.isNullOrEmpty()) {

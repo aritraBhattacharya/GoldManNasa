@@ -5,6 +5,7 @@ import com.aritra.goldmannasa.NasaApp
 import com.aritra.goldmannasa.di.modules.ContainerModule
 import com.aritra.goldmannasa.di.modules.DBModule
 import com.aritra.goldmannasa.di.modules.NetworkModule
+import com.aritra.goldmannasa.di.subcomponents.APODSubComponent
 import com.aritra.goldmannasa.presentation.ui.activities.ContainerActivity
 import dagger.BindsInstance
 import dagger.Component
@@ -13,17 +14,16 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     NetworkModule::class,
-    ContainerModule::class,
     DBModule::class])
 interface AppComponent {
 
-    fun inject(containerActivity: ContainerActivity)
+    fun getAPODSubComponentFactory() : APODSubComponent.Factory
 
     @Component.Factory
     interface Factory {
         fun create(
-            @BindsInstance nasaApp: NasaApp, // bind instance as application instance is a run time value
-            @BindsInstance appContext: Context, // bind instance as application instance is a run time value
+            @BindsInstance nasaApp: NasaApp,
+            @BindsInstance appContext: Context,
             networkModule: NetworkModule,
             dbModule: DBModule
         ): AppComponent
